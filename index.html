@@ -75,10 +75,28 @@
 
     .stars {
       min-height: 30px;
-      font-size: 26px;
-      letter-spacing: 2px;
+      font-size: clamp(17px, 2.2vw, 22px);
+      letter-spacing: 1px;
       color: #ffb000;
       text-shadow: 0 2px 0 #fff;
+    }
+
+    .series-track {
+      width: min(190px, 36vw);
+      height: 13px;
+      border-radius: 999px;
+      border: 2px solid rgba(38, 86, 106, 0.35);
+      background: rgba(255, 255, 255, 0.72);
+      overflow: hidden;
+    }
+
+    .series-fill {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ff8a2a, #ffd95c, #92d050);
+      transition: width 0.28s ease;
     }
 
     .stage {
@@ -172,6 +190,10 @@
       transform: translateX(-50%) translateY(-18px) rotate(-2deg);
     }
 
+    .rabbit.dance {
+      animation: bunnyDance 1.9s ease-in-out 1;
+    }
+
     .carrot-patch {
       position: absolute;
       left: 16px;
@@ -183,6 +205,78 @@
       gap: 6px;
       align-items: end;
       z-index: 3;
+    }
+
+    .number-line-wrap {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 3px solid rgba(38, 86, 106, 0.18);
+      border-radius: 8px;
+      background: #fffdf4;
+    }
+
+    .number-line-title {
+      font-size: clamp(17px, 2.5vw, 22px);
+      font-weight: 900;
+      line-height: 1.1;
+      color: #315161;
+    }
+
+    .number-line {
+      display: grid;
+      grid-template-columns: repeat(var(--line-count), minmax(28px, 1fr));
+      gap: 5px;
+      align-items: stretch;
+    }
+
+    .line-cell {
+      position: relative;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      border: 3px solid #9fcadd;
+      border-radius: 8px;
+      background: #eff9ff;
+      color: #274552;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .line-cell.filled {
+      border-color: #ca6c18;
+      background: #ffe0b8;
+      box-shadow: inset 0 -5px 0 rgba(255, 138, 42, 0.25);
+    }
+
+    .line-cell.empty {
+      border-style: dashed;
+      border-color: #b8ced8;
+      background: #ffffff;
+      color: #8aa1ad;
+    }
+
+    .line-cell.removed {
+      border-color: #d58aa0;
+      background: #ffe2ea;
+      color: #8c3150;
+    }
+
+    .line-cell.removed::after {
+      content: "";
+      position: absolute;
+      inset: 7px 9px;
+      border-top: 4px solid rgba(140, 49, 80, 0.75);
+      transform: rotate(-28deg);
+    }
+
+    .line-carrot {
+      width: 13px;
+      height: 28px;
+      border-radius: 0 0 10px 10px;
+      background: linear-gradient(180deg, #ffa23e, var(--carrot));
+      clip-path: polygon(50% 100%, 5% 0, 95% 0);
+      filter: drop-shadow(0 2px 0 rgba(196, 80, 16, 0.18));
     }
 
     .carrot {
@@ -403,91 +497,6 @@
       border-color: #ad3158;
     }
 
-    .bunny-friends {
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 102px;
-      height: 180px;
-      pointer-events: none;
-      opacity: 0.9;
-      z-index: 1;
-    }
-
-    .small-bunny {
-      width: 62px;
-      height: 72px;
-      --scale: 1;
-      position: relative;
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      scale: var(--scale);
-      transform-origin: bottom center;
-      animation: sway 2.8s ease-in-out infinite;
-    }
-
-    .small-bunny:nth-child(2) {
-      left: auto;
-      right: 2px;
-      animation-delay: 0.7s;
-    }
-
-    .small-bunny:nth-child(3) {
-      --scale: 0.72;
-      left: 6px;
-      bottom: 88px;
-      animation-delay: 0.25s;
-    }
-
-    .small-bunny:nth-child(4) {
-      --scale: 0.68;
-      right: 0;
-      left: auto;
-      bottom: 88px;
-      animation-delay: 1s;
-    }
-
-    .small-bunny:nth-child(5) {
-      --scale: 0.58;
-      left: 24%;
-      bottom: 112px;
-      animation-delay: 1.45s;
-    }
-
-    .small-bunny:nth-child(6) {
-      --scale: 0.6;
-      right: 21%;
-      left: auto;
-      bottom: 116px;
-      animation-delay: 1.8s;
-    }
-
-    .small-bunny::before,
-    .small-bunny::after {
-      content: "";
-      position: absolute;
-      background: #fff;
-      border: 3px solid #6b7f8f;
-    }
-
-    .small-bunny::before {
-      width: 44px;
-      height: 42px;
-      left: 9px;
-      bottom: 0;
-      border-radius: 50%;
-    }
-
-    .small-bunny::after {
-      width: 18px;
-      height: 54px;
-      left: 21px;
-      bottom: 31px;
-      border-radius: 50% 50% 40% 40%;
-      box-shadow: -16px 8px 0 -2px #fff, -16px 8px 0 1px #6b7f8f;
-    }
-
     .sparkle {
       position: absolute;
       width: 18px;
@@ -499,14 +508,49 @@
       z-index: 5;
     }
 
-    @keyframes sway {
-      50% { transform: translateY(-7px) rotate(3deg); }
+    .party-note {
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      width: min(82%, 260px);
+      min-height: 64px;
+      display: grid;
+      place-items: center;
+      padding: 10px 14px;
+      border: 4px solid #bf7317;
+      border-radius: 8px;
+      background: #fff3a3;
+      color: #773f00;
+      font-size: clamp(25px, 5vw, 42px);
+      font-weight: 900;
+      text-align: center;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 10px 0 rgba(35, 64, 74, 0.16);
+      animation: partyNote 2.2s ease forwards;
+      z-index: 6;
+    }
+
+    @keyframes bunnyDance {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg) scale(1); }
+      12% { transform: translateX(-50%) translateY(-24px) rotate(-8deg) scale(1.03); }
+      25% { transform: translateX(-50%) translateY(0) rotate(7deg) scale(1); }
+      38% { transform: translateX(-50%) translateY(-18px) rotate(8deg) scale(1.04); }
+      52% { transform: translateX(-50%) translateY(0) rotate(-7deg) scale(1); }
+      66% { transform: translateX(-50%) translateY(-22px) rotate(-5deg) scale(1.05); }
+      82% { transform: translateX(-50%) translateY(-6px) rotate(6deg) scale(1.02); }
     }
 
     @keyframes sparkle {
       0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
       35% { opacity: 1; }
       100% { transform: scale(1.4) rotate(110deg); opacity: 0; }
+    }
+
+    @keyframes partyNote {
+      0% { opacity: 0; transform: translate(-50%, -40%) scale(0.7); }
+      18% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+      72% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -62%) scale(0.92); }
     }
 
     @media (max-width: 820px) {
@@ -559,24 +603,6 @@
         height: 16px;
       }
 
-      .bunny-friends {
-        bottom: 72px;
-        height: 130px;
-      }
-
-      .small-bunny {
-        --scale: 0.78;
-      }
-
-      .small-bunny:nth-child(3),
-      .small-bunny:nth-child(4) {
-        bottom: 62px;
-      }
-
-      .small-bunny:nth-child(5),
-      .small-bunny:nth-child(6) {
-        bottom: 80px;
-      }
     }
 
     @media (max-width: 560px) {
@@ -638,8 +664,9 @@
       <h1>Зайчики и морковки</h1>
       <div class="score" aria-label="Счёт">
         <span>Уровень: <span id="levelName">Разогрев</span></span>
-        <span>Серия: <span id="streak">0</span></span>
-        <span>Заданий: <span id="totalCorrect">0</span></span>
+        <span>Серия: <span id="streak">0/10</span></span>
+        <span class="series-track" aria-hidden="true"><span class="series-fill" id="seriesFill"></span></span>
+        <span>Всего: <span id="totalCorrect">0</span></span>
         <span class="stars" id="stars" aria-hidden="true"></span>
       </div>
     </header>
@@ -652,14 +679,6 @@
         </div>
 
         <div class="garden"></div>
-        <div class="bunny-friends" aria-hidden="true">
-          <span class="small-bunny"></span>
-          <span class="small-bunny"></span>
-          <span class="small-bunny"></span>
-          <span class="small-bunny"></span>
-          <span class="small-bunny"></span>
-          <span class="small-bunny"></span>
-        </div>
 
         <svg class="rabbit" id="rabbit" viewBox="0 0 240 260" role="img" aria-label="Зайчик с корзинкой">
           <defs>
@@ -703,6 +722,7 @@
             <span class="equals">=</span>
             <span class="answer-view" id="answerView">8</span>
           </div>
+          <div class="number-line-wrap" id="numberLineWrap" aria-label="Наглядный состав числа"></div>
         </div>
 
         <div class="answer-grid" id="answerButtons" aria-label="Ответы"></div>
@@ -718,6 +738,7 @@
   <script>
     const goals = [6, 7, 8, 9];
     const answers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const seriesLength = 10;
     const levels = [
       {
         name: "Разогрев",
@@ -759,8 +780,10 @@
     const message = document.querySelector("#message");
     const levelName = document.querySelector("#levelName");
     const streak = document.querySelector("#streak");
+    const seriesFill = document.querySelector("#seriesFill");
     const totalCorrect = document.querySelector("#totalCorrect");
     const stars = document.querySelector("#stars");
+    const numberLineWrap = document.querySelector("#numberLineWrap");
     const carrotPatch = document.querySelector("#carrotPatch");
     const rabbit = document.querySelector("#rabbit");
     const field = document.querySelector("#field");
@@ -794,6 +817,40 @@
       parts.forEach((part) => {
         equation.append(makeToken(part.text, part.className, part.id));
       });
+    }
+
+    function makeLine(title, filled, empty, removed = 0) {
+      return { title, filled, empty, removed };
+    }
+
+    function renderNumberLine(line) {
+      numberLineWrap.innerHTML = "";
+      const title = document.createElement("div");
+      title.className = "number-line-title";
+      title.textContent = line.title;
+
+      const row = document.createElement("div");
+      row.className = "number-line";
+      row.style.setProperty("--line-count", line.filled + line.empty + line.removed);
+
+      [
+        ["filled", line.filled],
+        ["empty", line.empty],
+        ["removed", line.removed]
+      ].forEach(([type, count]) => {
+        for (let i = 0; i < count; i += 1) {
+          const cell = document.createElement("span");
+          cell.className = `line-cell ${type}`;
+          if (type !== "empty") {
+            const carrot = document.createElement("span");
+            carrot.className = "line-carrot";
+            cell.append(carrot);
+          }
+          row.append(cell);
+        }
+      });
+
+      numberLineWrap.append(title, row);
     }
 
     function makeMiniCarrots(count) {
@@ -860,9 +917,10 @@
     }
 
     function updateStars() {
-      const count = Math.min(state.streak, 5);
-      stars.textContent = "★".repeat(count);
-      streak.textContent = state.streak;
+      const count = Math.min(state.streak, seriesLength);
+      stars.textContent = "●".repeat(count) + "○".repeat(seriesLength - count);
+      streak.textContent = `${count}/${seriesLength}`;
+      seriesFill.style.width = `${(count / seriesLength) * 100}%`;
       totalCorrect.textContent = state.totalCorrect;
       levelName.textContent = currentLevel().name;
     }
@@ -879,6 +937,7 @@
           answer,
           startCarrots: known,
           correctCarrots: target,
+          line: makeLine(`Состав ${target}: часть видна, часть пустая`, known, answer),
           badge: target,
           cloud: "Собери столько морковок",
           title: `Сколько было сначала, если добавили ${known} и стало ${target}?`,
@@ -901,6 +960,7 @@
           answer,
           startCarrots: target,
           correctCarrots: answer,
+          line: makeLine(`Было ${target}: оранжевые остались, розовые отдали`, answer, 0, away),
           badge: target,
           cloud: "Было столько морковок",
           title: `У зайчика было ${target}. Он отдал ${away}. Сколько осталось?`,
@@ -922,10 +982,12 @@
         const takeMax = Math.max(takeMin, start - 1);
         const away = randomInt(takeMin, takeMax);
         const answer = target - start + away;
+        const current = start - away;
         return {
           answer,
           startCarrots: start,
           correctCarrots: target,
+          line: makeLine(`До ${target}: морковки и пустые места`, current, answer),
           badge: target,
           cloud: "Верни до этого числа",
           title: `Было ${start}, ${away} отдали. Сколько добавить, чтобы стало ${target}?`,
@@ -949,6 +1011,7 @@
         answer,
         startCarrots: known,
         correctCarrots: target,
+        line: makeLine(`Состав ${target}: морковки и пустые места`, known, answer),
         badge: target,
         cloud: "Собери столько морковок",
         title: `У зайчика уже ${known}. Сколько добавить до ${target}?`,
@@ -974,6 +1037,7 @@
       taskText.textContent = state.task.title;
       levelNote.textContent = level.note;
       renderEquation(state.task.parts);
+      renderNumberLine(state.task.line);
       message.textContent = "Выбери морковку с числом.";
 
       document.querySelectorAll(".answer-button").forEach((button) => {
@@ -994,29 +1058,43 @@
         state.locked = true;
         state.streak += 1;
         state.totalCorrect += 1;
+        const seriesComplete = state.streak >= seriesLength;
         button.classList.add("correct");
         document.querySelector("#missingNumber").textContent = answer;
-        message.textContent = `Верно: ${task.success}`;
+        message.textContent = seriesComplete
+          ? `Серия ${seriesLength} из ${seriesLength}! Зайчик танцует!`
+          : `Верно: ${task.success}`;
         renderCarrotPatch(task.correctCarrots);
         updateStars();
-        celebrate();
+        celebrate(seriesComplete);
 
-        setTimeout(newRound, 1250);
+        setTimeout(() => {
+          if (seriesComplete) state.streak = 0;
+          newRound();
+        }, seriesComplete ? 2600 : 1250);
         return;
       }
 
-      state.streak = 0;
       button.classList.add("try-again");
       message.textContent = task.hint;
       updateStars();
       setTimeout(() => button.classList.remove("try-again"), 650);
     }
 
-    function celebrate() {
-      rabbit.classList.add("hop");
-      setTimeout(() => rabbit.classList.remove("hop"), 260);
+    function celebrate(isBig = false) {
+      rabbit.classList.remove("hop", "dance");
+      void rabbit.offsetWidth;
 
-      for (let i = 0; i < 8; i += 1) {
+      if (isBig) {
+        rabbit.classList.add("dance");
+        setTimeout(() => rabbit.classList.remove("dance"), 2000);
+        showPartyNote();
+      } else {
+        rabbit.classList.add("hop");
+        setTimeout(() => rabbit.classList.remove("hop"), 260);
+      }
+
+      for (let i = 0; i < (isBig ? 24 : 8); i += 1) {
         const sparkle = document.createElement("span");
         sparkle.className = "sparkle";
         sparkle.style.left = `${randomInt(22, 78)}%`;
@@ -1025,6 +1103,14 @@
         field.append(sparkle);
         setTimeout(() => sparkle.remove(), 1200);
       }
+    }
+
+    function showPartyNote() {
+      const note = document.createElement("span");
+      note.className = "party-note";
+      note.textContent = "10 из 10!";
+      field.append(note);
+      setTimeout(() => note.remove(), 2300);
     }
 
     nextButton.addEventListener("click", newRound);
