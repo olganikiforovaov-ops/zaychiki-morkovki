@@ -16,7 +16,7 @@
       --panel: #fff9e8;
       --line: #26566a;
       --soft: rgba(255, 255, 255, 0.7);
-      font-family: "Trebuchet MS", "Arial", sans-serif;
+      font-family: "Chalkboard SE", "Marker Felt", "Trebuchet MS", "Arial", sans-serif;
     }
 
     * {
@@ -187,11 +187,52 @@
     }
 
     .rabbit.hop {
-      transform: translateX(-50%) translateY(-18px) rotate(-2deg);
+      animation: bunnyHop 0.42s ease-out 1;
+    }
+
+    .rabbit.twirl {
+      animation: bunnyTwirl 0.7s ease-in-out 1;
+    }
+
+    .rabbit.wiggle {
+      animation: bunnyWiggle 0.58s ease-in-out 1;
     }
 
     .rabbit.dance {
       animation: bunnyDance 1.9s ease-in-out 1;
+    }
+
+    .rabbit.sad {
+      animation: bunnyOops 0.68s ease-in-out 1;
+    }
+
+    .happy-mouth,
+    .sad-mouth,
+    .tear {
+      transition: opacity 0.18s ease;
+    }
+
+    .sad-mouth,
+    .tear {
+      opacity: 0;
+    }
+
+    .tear {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .rabbit.sad .happy-mouth {
+      opacity: 0;
+    }
+
+    .rabbit.sad .sad-mouth,
+    .rabbit.sad .tear {
+      opacity: 1;
+    }
+
+    .rabbit.sad .tear {
+      animation: tearDrop 0.68s ease-in-out 1;
     }
 
     .carrot-patch {
@@ -207,7 +248,15 @@
       z-index: 3;
     }
 
-    .number-line-wrap {
+    .visual-tools {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(180px, 0.8fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .number-line-wrap,
+    .number-house {
       display: grid;
       gap: 8px;
       padding: 10px;
@@ -216,11 +265,118 @@
       background: #fffdf4;
     }
 
-    .number-line-title {
+    .number-line-title,
+    .number-house-title {
       font-size: clamp(17px, 2.5vw, 22px);
       font-weight: 900;
       line-height: 1.1;
       color: #315161;
+    }
+
+    .number-house {
+      background: #fff7dc;
+      border-color: rgba(191, 115, 23, 0.28);
+      align-content: start;
+      justify-items: center;
+    }
+
+    .house-shape {
+      width: min(100%, 220px);
+      display: grid;
+      justify-items: center;
+      gap: 0;
+    }
+
+    .house-roof {
+      position: relative;
+      width: 92%;
+      min-height: 58px;
+      display: grid;
+      place-items: center;
+      margin-bottom: -2px;
+      color: #773f00;
+      font-size: clamp(30px, 5vw, 46px);
+      font-weight: 900;
+      line-height: 1;
+      z-index: 1;
+    }
+
+    .house-roof::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #ffd95c;
+      border: 4px solid #bf7317;
+      border-radius: 8px 8px 3px 3px;
+      clip-path: polygon(50% 0, 100% 88%, 100% 100%, 0 100%, 0 88%);
+      box-shadow: 0 5px 0 rgba(191, 115, 23, 0.18);
+      z-index: -1;
+    }
+
+    .house-body {
+      width: 100%;
+      display: grid;
+      gap: 6px;
+      padding: 12px 10px 10px;
+      border: 4px solid #bf7317;
+      border-top-width: 3px;
+      border-radius: 0 0 8px 8px;
+      background: #fffdf4;
+      box-shadow: inset 0 -6px 0 rgba(255, 217, 92, 0.24);
+    }
+
+    .house-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    .house-part {
+      min-height: 36px;
+      display: grid;
+      place-items: center;
+      border: 3px solid #9fcadd;
+      border-radius: 8px;
+      background: #eff9ff;
+      color: #274552;
+      font-size: clamp(18px, 2.8vw, 26px);
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: inset 0 -4px 0 rgba(159, 202, 221, 0.24);
+    }
+
+    .house-row.active .house-part {
+      border-color: #d8791b;
+      background: #ffd95c;
+      color: #773f00;
+      box-shadow: 0 4px 0 rgba(191, 115, 23, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .house-plus {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      margin: -2px 0;
+      border-radius: 50%;
+      background: #ff8a2a;
+      color: #fff;
+      border: 3px solid #bf7317;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 3px 0 rgba(191, 115, 23, 0.2);
+    }
+
+    .pair-help {
+      width: 100%;
+      min-height: 24px;
+      color: #775122;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 900;
+      line-height: 1.12;
+      text-align: center;
     }
 
     .number-line {
@@ -241,6 +397,16 @@
       color: #274552;
       font-size: 18px;
       font-weight: 900;
+    }
+
+    .line-cell::before {
+      content: attr(data-index);
+      position: absolute;
+      top: 2px;
+      right: 5px;
+      color: rgba(39, 69, 82, 0.65);
+      font-size: 12px;
+      line-height: 1;
     }
 
     .line-cell.filled {
@@ -273,6 +439,7 @@
     .line-carrot {
       width: 13px;
       height: 28px;
+      margin-top: 7px;
       border-radius: 0 0 10px 10px;
       background: linear-gradient(180deg, #ffa23e, var(--carrot));
       clip-path: polygon(50% 100%, 5% 0, 95% 0);
@@ -530,6 +697,40 @@
       z-index: 6;
     }
 
+    @keyframes bunnyHop {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+      45% { transform: translateX(-50%) translateY(-26px) rotate(-3deg); }
+      72% { transform: translateX(-50%) translateY(-8px) rotate(2deg); }
+    }
+
+    @keyframes bunnyTwirl {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg) scale(1); }
+      28% { transform: translateX(-50%) translateY(-18px) rotate(-9deg) scale(1.04); }
+      58% { transform: translateX(-50%) translateY(-8px) rotate(8deg) scale(1.02); }
+      80% { transform: translateX(-50%) translateY(-16px) rotate(-4deg) scale(1.05); }
+    }
+
+    @keyframes bunnyWiggle {
+      0%, 100% { transform: translateX(-50%) rotate(0deg); }
+      18% { transform: translateX(-55%) rotate(-5deg); }
+      36% { transform: translateX(-45%) rotate(5deg); }
+      54% { transform: translateX(-53%) rotate(-4deg); }
+      72% { transform: translateX(-47%) rotate(4deg); }
+    }
+
+    @keyframes bunnyOops {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+      22% { transform: translateX(-58%) translateY(3px) rotate(-4deg); }
+      46% { transform: translateX(-44%) translateY(0) rotate(3deg); }
+      72% { transform: translateX(-53%) translateY(4px) rotate(-2deg); }
+    }
+
+    @keyframes tearDrop {
+      0% { transform: translateY(-2px) scale(0.5); opacity: 0; }
+      30% { opacity: 1; }
+      100% { transform: translateY(10px) scale(1); opacity: 0; }
+    }
+
     @keyframes bunnyDance {
       0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg) scale(1); }
       12% { transform: translateX(-50%) translateY(-24px) rotate(-8deg) scale(1.03); }
@@ -638,6 +839,10 @@
         min-height: 64px;
       }
 
+      .visual-tools {
+        grid-template-columns: 1fr;
+      }
+
       .feedback {
         display: grid;
       }
@@ -697,7 +902,10 @@
           <circle cx="88" cy="151" r="11" fill="#ffd3df"/>
           <circle cx="152" cy="151" r="11" fill="#ffd3df"/>
           <path d="M119 151 l-9 10 h18 z" fill="#ff7ea8"/>
-          <path d="M103 171 q17 18 35 0" fill="none" stroke="#243b53" stroke-width="5" stroke-linecap="round"/>
+          <path class="happy-mouth" d="M103 171 q17 18 35 0" fill="none" stroke="#243b53" stroke-width="5" stroke-linecap="round"/>
+          <path class="sad-mouth" d="M101 177 q18 -15 38 0" fill="none" stroke="#243b53" stroke-width="5" stroke-linecap="round"/>
+          <circle class="tear tear-left" cx="78" cy="157" r="5" fill="#8de0f5"/>
+          <circle class="tear tear-right" cx="164" cy="157" r="5" fill="#8de0f5"/>
           <path d="M55 210 q65 36 130 0 l-12 42 h-106 z" fill="#b77a3c" stroke="#6d4727" stroke-width="6" stroke-linejoin="round"/>
           <path d="M65 210 q55 -34 110 0" fill="none" stroke="#6d4727" stroke-width="8" stroke-linecap="round"/>
           <path d="M65 202 q-24 -18 -34 10" fill="none" stroke="#526b7c" stroke-width="12" stroke-linecap="round"/>
@@ -722,7 +930,10 @@
             <span class="equals">=</span>
             <span class="answer-view" id="answerView">8</span>
           </div>
-          <div class="number-line-wrap" id="numberLineWrap" aria-label="Наглядный состав числа"></div>
+          <div class="visual-tools">
+            <div class="number-line-wrap" id="numberLineWrap" aria-label="Наглядный состав числа"></div>
+            <div class="number-house" id="numberHouse" aria-label="Домик состава числа"></div>
+          </div>
         </div>
 
         <div class="answer-grid" id="answerButtons" aria-label="Ответы"></div>
@@ -784,6 +995,7 @@
     const totalCorrect = document.querySelector("#totalCorrect");
     const stars = document.querySelector("#stars");
     const numberLineWrap = document.querySelector("#numberLineWrap");
+    const numberHouse = document.querySelector("#numberHouse");
     const carrotPatch = document.querySelector("#carrotPatch");
     const rabbit = document.querySelector("#rabbit");
     const field = document.querySelector("#field");
@@ -832,7 +1044,9 @@
       const row = document.createElement("div");
       row.className = "number-line";
       row.style.setProperty("--line-count", line.filled + line.empty + line.removed);
+      row.setAttribute("aria-label", line.title);
 
+      let cellNumber = 1;
       [
         ["filled", line.filled],
         ["empty", line.empty],
@@ -841,6 +1055,8 @@
         for (let i = 0; i < count; i += 1) {
           const cell = document.createElement("span");
           cell.className = `line-cell ${type}`;
+          cell.dataset.index = cellNumber;
+          cellNumber += 1;
           if (type !== "empty") {
             const carrot = document.createElement("span");
             carrot.className = "line-carrot";
@@ -851,6 +1067,60 @@
       });
 
       numberLineWrap.append(title, row);
+    }
+
+    function isSamePair(pair, left, right) {
+      if (!pair) return false;
+      return (pair[0] === left && pair[1] === right) || (pair[0] === right && pair[1] === left);
+    }
+
+    function renderNumberHouse(target, pair) {
+      numberHouse.innerHTML = "";
+
+      const title = document.createElement("div");
+      title.className = "number-house-title";
+      title.textContent = "Домик числа";
+
+      const house = document.createElement("div");
+      house.className = "house-shape";
+
+      const roof = document.createElement("div");
+      roof.className = "house-roof";
+      roof.textContent = target;
+
+      const body = document.createElement("div");
+      body.className = "house-body";
+
+      for (let left = 1; left <= Math.floor(target / 2); left += 1) {
+        const right = target - left;
+        const row = document.createElement("div");
+        row.className = "house-row";
+        row.setAttribute("aria-label", `${left} и ${right}`);
+
+        if (isSamePair(pair, left, right)) {
+          row.classList.add("active");
+        }
+
+        [left, right].forEach((part) => {
+          const cell = document.createElement("span");
+          cell.className = "house-part";
+          cell.textContent = part;
+          row.append(cell);
+        });
+
+        body.append(row);
+      }
+
+      const plus = document.createElement("div");
+      plus.className = "house-plus";
+      plus.textContent = "+";
+      house.append(roof, plus, body);
+
+      const help = document.createElement("div");
+      help.className = "pair-help";
+      help.textContent = pair ? `Сейчас: ${pair[0]} + ${pair[1]} = ${target}` : "";
+
+      numberHouse.append(title, house, help);
     }
 
     function makeMiniCarrots(count) {
@@ -935,13 +1205,14 @@
         const answer = target - known;
         return {
           answer,
+          pair: [answer, known],
           startCarrots: known,
           correctCarrots: target,
           line: makeLine(`Состав ${target}: часть видна, часть пустая`, known, answer),
           badge: target,
           cloud: "Собери столько морковок",
           title: `Сколько было сначала, если добавили ${known} и стало ${target}?`,
-          hint: "Почти. Найди вторую часть числа.",
+          hint: "Почти. Посмотри на подсвеченную пару в домике числа.",
           success: `${answer} + ${known} = ${target}`,
           parts: [
             { text: "?", className: "missing", id: "missingNumber" },
@@ -958,13 +1229,14 @@
         const answer = target - away;
         return {
           answer,
+          pair: [answer, away],
           startCarrots: target,
           correctCarrots: answer,
           line: makeLine(`Было ${target}: оранжевые остались, розовые отдали`, answer, 0, away),
           badge: target,
           cloud: "Было столько морковок",
           title: `У зайчика было ${target}. Он отдал ${away}. Сколько осталось?`,
-          hint: "Почти. Можно отсчитать морковки назад.",
+          hint: "Почти. Смотри: сколько осталось + сколько отдали = всё число.",
           success: `${target} - ${away} = ${answer}`,
           parts: [
             { text: target, className: "big-number" },
@@ -985,13 +1257,14 @@
         const current = start - away;
         return {
           answer,
+          pair: [current, answer],
           startCarrots: start,
           correctCarrots: target,
           line: makeLine(`До ${target}: морковки и пустые места`, current, answer),
           badge: target,
           cloud: "Верни до этого числа",
           title: `Было ${start}, ${away} отдали. Сколько добавить, чтобы стало ${target}?`,
-          hint: "Почти. Сначала убери, потом добери до числа.",
+          hint: "Почти. Сначала убери, потом посмотри, сколько не хватает до числа.",
           success: `${start} - ${away} + ${answer} = ${target}`,
           parts: [
             { text: start, className: "big-number" },
@@ -1009,13 +1282,14 @@
       const answer = target - known;
       return {
         answer,
+        pair: [known, answer],
         startCarrots: known,
         correctCarrots: target,
         line: makeLine(`Состав ${target}: морковки и пустые места`, known, answer),
         badge: target,
         cloud: "Собери столько морковок",
         title: `У зайчика уже ${known}. Сколько добавить до ${target}?`,
-        hint: "Почти. Посмотри, сколько не хватает.",
+        hint: "Почти. Посмотри на пустые места и подсвеченную пару.",
         success: `${known} + ${answer} = ${target}`,
         parts: [
           { text: known, className: "big-number" },
@@ -1038,7 +1312,9 @@
       levelNote.textContent = level.note;
       renderEquation(state.task.parts);
       renderNumberLine(state.task.line);
+      renderNumberHouse(state.target, state.task.pair);
       message.textContent = "Выбери морковку с числом.";
+      rabbit.classList.remove("hop", "twirl", "wiggle", "dance", "sad");
 
       document.querySelectorAll(".answer-button").forEach((button) => {
         button.classList.remove("correct", "try-again");
@@ -1078,11 +1354,12 @@
       button.classList.add("try-again");
       message.textContent = task.hint;
       updateStars();
+      showOops();
       setTimeout(() => button.classList.remove("try-again"), 650);
     }
 
     function celebrate(isBig = false) {
-      rabbit.classList.remove("hop", "dance");
+      rabbit.classList.remove("hop", "twirl", "wiggle", "dance", "sad");
       void rabbit.offsetWidth;
 
       if (isBig) {
@@ -1090,8 +1367,9 @@
         setTimeout(() => rabbit.classList.remove("dance"), 2000);
         showPartyNote();
       } else {
-        rabbit.classList.add("hop");
-        setTimeout(() => rabbit.classList.remove("hop"), 260);
+        const reaction = pick(["hop", "twirl", "wiggle"]);
+        rabbit.classList.add(reaction);
+        setTimeout(() => rabbit.classList.remove(reaction), 720);
       }
 
       for (let i = 0; i < (isBig ? 24 : 8); i += 1) {
@@ -1103,6 +1381,13 @@
         field.append(sparkle);
         setTimeout(() => sparkle.remove(), 1200);
       }
+    }
+
+    function showOops() {
+      rabbit.classList.remove("hop", "twirl", "wiggle", "dance", "sad");
+      void rabbit.offsetWidth;
+      rabbit.classList.add("sad");
+      setTimeout(() => rabbit.classList.remove("sad"), 760);
     }
 
     function showPartyNote() {
