@@ -248,15 +248,7 @@
       z-index: 3;
     }
 
-    .visual-tools {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(180px, 0.8fr);
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .number-line-wrap,
-    .number-house {
+    .number-line-wrap {
       display: grid;
       gap: 8px;
       padding: 10px;
@@ -265,118 +257,11 @@
       background: #fffdf4;
     }
 
-    .number-line-title,
-    .number-house-title {
+    .number-line-title {
       font-size: clamp(17px, 2.5vw, 22px);
       font-weight: 900;
       line-height: 1.1;
       color: #315161;
-    }
-
-    .number-house {
-      background: #fff7dc;
-      border-color: rgba(191, 115, 23, 0.28);
-      align-content: start;
-      justify-items: center;
-    }
-
-    .house-shape {
-      width: min(100%, 250px);
-      display: grid;
-      justify-items: center;
-      gap: 0;
-    }
-
-    .house-roof {
-      position: relative;
-      width: 92%;
-      min-height: 52px;
-      display: grid;
-      place-items: center;
-      margin-bottom: -2px;
-      color: #773f00;
-      font-size: clamp(30px, 5vw, 46px);
-      font-weight: 900;
-      line-height: 1;
-      z-index: 1;
-    }
-
-    .house-roof::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: #ffd95c;
-      border: 4px solid #bf7317;
-      border-radius: 8px 8px 3px 3px;
-      clip-path: polygon(50% 0, 100% 88%, 100% 100%, 0 100%, 0 88%);
-      box-shadow: 0 5px 0 rgba(191, 115, 23, 0.18);
-      z-index: -1;
-    }
-
-    .house-body {
-      width: 100%;
-      display: grid;
-      gap: 4px;
-      padding: 10px 8px 9px;
-      border: 4px solid #bf7317;
-      border-top-width: 3px;
-      border-radius: 0 0 8px 8px;
-      background: #fffdf4;
-      box-shadow: inset 0 -6px 0 rgba(255, 217, 92, 0.24);
-    }
-
-    .house-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      align-items: stretch;
-    }
-
-    .house-part {
-      min-height: 31px;
-      display: grid;
-      place-items: center;
-      border: 3px solid #9fcadd;
-      border-radius: 8px;
-      background: #eff9ff;
-      color: #274552;
-      font-size: clamp(18px, 2.8vw, 26px);
-      font-weight: 900;
-      line-height: 1;
-      box-shadow: inset 0 -4px 0 rgba(159, 202, 221, 0.24);
-    }
-
-    .house-row.active .house-part {
-      border-color: #d8791b;
-      background: #ffd95c;
-      color: #773f00;
-      box-shadow: 0 4px 0 rgba(191, 115, 23, 0.18);
-      transform: translateY(-1px);
-    }
-
-    .house-plus {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      margin: -2px 0;
-      border-radius: 50%;
-      background: #ff8a2a;
-      color: #fff;
-      border: 3px solid #bf7317;
-      font-size: 22px;
-      font-weight: 900;
-      box-shadow: 0 3px 0 rgba(191, 115, 23, 0.2);
-    }
-
-    .pair-help {
-      width: 100%;
-      min-height: 24px;
-      color: #775122;
-      font-size: clamp(15px, 2vw, 18px);
-      font-weight: 900;
-      line-height: 1.12;
-      text-align: center;
     }
 
     .number-line {
@@ -847,10 +732,6 @@
         min-height: 64px;
       }
 
-      .visual-tools {
-        grid-template-columns: 1fr;
-      }
-
       .feedback {
         display: grid;
       }
@@ -941,10 +822,7 @@
             <span class="equals">=</span>
             <span class="answer-view" id="answerView">8</span>
           </div>
-          <div class="visual-tools">
-            <div class="number-line-wrap" id="numberLineWrap" aria-label="Наглядный состав числа"></div>
-            <div class="number-house" id="numberHouse" aria-label="Домик состава числа"></div>
-          </div>
+          <div class="number-line-wrap" id="numberLineWrap" aria-label="Наглядный состав числа"></div>
         </div>
 
         <div class="answer-grid" id="answerButtons" aria-label="Ответы"></div>
@@ -1009,7 +887,6 @@
     const totalCorrect = document.querySelector("#totalCorrect");
     const stars = document.querySelector("#stars");
     const numberLineWrap = document.querySelector("#numberLineWrap");
-    const numberHouse = document.querySelector("#numberHouse");
     const carrotPatch = document.querySelector("#carrotPatch");
     const rabbit = document.querySelector("#rabbit");
     const field = document.querySelector("#field");
@@ -1115,60 +992,6 @@
       numberLineWrap.append(title, row);
     }
 
-    function isSamePair(pair, left, right) {
-      if (!pair) return false;
-      return (pair[0] === left && pair[1] === right) || (pair[0] === right && pair[1] === left);
-    }
-
-    function renderNumberHouse(target, pair) {
-      numberHouse.innerHTML = "";
-
-      const title = document.createElement("div");
-      title.className = "number-house-title";
-      title.textContent = "Домик числа";
-
-      const house = document.createElement("div");
-      house.className = "house-shape";
-
-      const roof = document.createElement("div");
-      roof.className = "house-roof";
-      roof.textContent = target;
-
-      const body = document.createElement("div");
-      body.className = "house-body";
-
-      for (let left = 1; left <= Math.floor(target / 2); left += 1) {
-        const right = target - left;
-        const row = document.createElement("div");
-        row.className = "house-row";
-        row.setAttribute("aria-label", `${left} и ${right}`);
-
-        if (isSamePair(pair, left, right)) {
-          row.classList.add("active");
-        }
-
-        [left, right].forEach((part) => {
-          const cell = document.createElement("span");
-          cell.className = "house-part";
-          cell.textContent = part;
-          row.append(cell);
-        });
-
-        body.append(row);
-      }
-
-      const plus = document.createElement("div");
-      plus.className = "house-plus";
-      plus.textContent = "+";
-      house.append(roof, plus, body);
-
-      const help = document.createElement("div");
-      help.className = "pair-help";
-      help.textContent = pair ? `Сейчас: ${pair[0]} + ${pair[1]} = ${target}` : "";
-
-      numberHouse.append(title, house, help);
-    }
-
     function makeMiniCarrots(count) {
       const wrap = document.createElement("span");
       wrap.className = "mini-carrots";
@@ -1228,14 +1051,13 @@
         const answer = target - known;
         return {
           answer,
-          pair: [answer, known],
           startCarrots: known,
           correctCarrots: target,
           line: makeLine(`Состав ${target}: часть видна, часть пустая`, known, answer),
           badge: target,
           cloud: "Собери столько морковок",
           title: `Сколько было сначала, если добавили ${known} и стало ${target}?`,
-          hint: "Почти. Посмотри на подсвеченную пару в домике числа.",
+          hint: "Почти. Посмотри на линейку: сколько мест не хватает?",
           success: `${answer} + ${known} = ${target}`,
           parts: [
             { text: "?", className: "missing", id: "missingNumber" },
@@ -1252,7 +1074,6 @@
         const answer = target - away;
         return {
           answer,
-          pair: [answer, away],
           startCarrots: target,
           correctCarrots: answer,
           line: makeLine(`Было ${target}: оранжевые остались, розовые отдали`, answer, 0, away),
@@ -1278,7 +1099,6 @@
         const start = current + away;
         return {
           answer,
-          pair: [current, answer],
           startCarrots: start,
           correctCarrots: target,
           line: makeLine(`До ${target}: морковки и пустые места`, current, answer),
@@ -1303,14 +1123,13 @@
       const answer = target - known;
       return {
         answer,
-        pair: [known, answer],
         startCarrots: known,
         correctCarrots: target,
         line: makeLine(`Состав ${target}: морковки и пустые места`, known, answer),
         badge: target,
         cloud: "Собери столько морковок",
         title: `У зайчика уже ${known}. Сколько добавить до ${target}?`,
-        hint: "Почти. Посмотри на пустые места и подсвеченную пару.",
+        hint: "Почти. Посмотри на пустые места на линейке.",
         success: `${known} + ${answer} = ${target}`,
         parts: [
           { text: known, className: "big-number" },
@@ -1333,7 +1152,6 @@
       levelNote.textContent = level.note;
       renderEquation(state.task.parts);
       renderNumberLine(state.task.line);
-      renderNumberHouse(state.target, state.task.pair);
       message.textContent = "Выбери морковку с числом.";
       rabbit.classList.remove("hop", "twirl", "wiggle", "dance", "sad");
 
