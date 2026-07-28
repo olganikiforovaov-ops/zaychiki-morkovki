@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Зайчики и морковки: состав числа</title>
+  <title>Зайчики и морковки: тренировка счета</title>
   <style>
     :root {
       --sky: #bceaf1;
@@ -246,89 +246,6 @@
       gap: 4px;
       align-items: end;
       z-index: 3;
-    }
-
-    .number-line-wrap {
-      display: grid;
-      gap: 8px;
-      padding: 10px;
-      border: 3px solid rgba(38, 86, 106, 0.18);
-      border-radius: 8px;
-      background: #fffdf4;
-    }
-
-    .number-line-title {
-      font-size: clamp(17px, 2.5vw, 22px);
-      font-weight: 900;
-      line-height: 1.1;
-      color: #315161;
-    }
-
-    .number-line {
-      display: grid;
-      grid-template-columns: repeat(var(--line-count), minmax(12px, 1fr));
-      gap: 4px;
-      align-items: stretch;
-    }
-
-    .line-cell {
-      position: relative;
-      min-height: 36px;
-      display: grid;
-      place-items: center;
-      border: 2px solid #9fcadd;
-      border-radius: 8px;
-      background: #eff9ff;
-      color: #274552;
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .line-cell::before {
-      content: attr(data-index);
-      position: absolute;
-      top: 2px;
-      right: 5px;
-      color: rgba(39, 69, 82, 0.65);
-      font-size: 10px;
-      line-height: 1;
-    }
-
-    .line-cell.filled {
-      border-color: #ca6c18;
-      background: #ffe0b8;
-      box-shadow: inset 0 -5px 0 rgba(255, 138, 42, 0.25);
-    }
-
-    .line-cell.empty {
-      border-style: dashed;
-      border-color: #b8ced8;
-      background: #ffffff;
-      color: #8aa1ad;
-    }
-
-    .line-cell.removed {
-      border-color: #d58aa0;
-      background: #ffe2ea;
-      color: #8c3150;
-    }
-
-    .line-cell.removed::after {
-      content: "";
-      position: absolute;
-      inset: 7px 9px;
-      border-top: 4px solid rgba(140, 49, 80, 0.75);
-      transform: rotate(-28deg);
-    }
-
-    .line-carrot {
-      width: 10px;
-      height: 23px;
-      margin-top: 7px;
-      border-radius: 0 0 10px 10px;
-      background: linear-gradient(180deg, #ffa23e, var(--carrot));
-      clip-path: polygon(50% 100%, 5% 0, 95% 0);
-      filter: drop-shadow(0 2px 0 rgba(196, 80, 16, 0.18));
     }
 
     .carrot {
@@ -753,7 +670,7 @@
   </style>
 </head>
 <body>
-  <main class="game" aria-label="Игра на состав числа">
+  <main class="game" aria-label="Игра на счет">
     <header class="topbar">
       <h1>Зайчики и морковки</h1>
       <div class="score" aria-label="Счёт">
@@ -822,7 +739,6 @@
             <span class="equals">=</span>
             <span class="answer-view" id="answerView">8</span>
           </div>
-          <div class="number-line-wrap" id="numberLineWrap" aria-label="Наглядный состав числа"></div>
         </div>
 
         <div class="answer-grid" id="answerButtons" aria-label="Ответы"></div>
@@ -848,7 +764,7 @@
         modes: ["addRight", "subtract"]
       },
       {
-        name: "Состав",
+        name: "Сложнее",
         note: "Больше заданий на числа от 11 до 17.",
         modes: ["addRight", "addLeft", "subtract"]
       },
@@ -886,7 +802,6 @@
     const seriesFill = document.querySelector("#seriesFill");
     const totalCorrect = document.querySelector("#totalCorrect");
     const stars = document.querySelector("#stars");
-    const numberLineWrap = document.querySelector("#numberLineWrap");
     const carrotPatch = document.querySelector("#carrotPatch");
     const rabbit = document.querySelector("#rabbit");
     const field = document.querySelector("#field");
@@ -954,44 +869,6 @@
       });
     }
 
-    function makeLine(title, filled, empty, removed = 0) {
-      return { title, filled, empty, removed };
-    }
-
-    function renderNumberLine(line) {
-      numberLineWrap.innerHTML = "";
-      const title = document.createElement("div");
-      title.className = "number-line-title";
-      title.textContent = line.title;
-
-      const row = document.createElement("div");
-      row.className = "number-line";
-      row.style.setProperty("--line-count", line.filled + line.empty + line.removed);
-      row.setAttribute("aria-label", line.title);
-
-      let cellNumber = 1;
-      [
-        ["filled", line.filled],
-        ["empty", line.empty],
-        ["removed", line.removed]
-      ].forEach(([type, count]) => {
-        for (let i = 0; i < count; i += 1) {
-          const cell = document.createElement("span");
-          cell.className = `line-cell ${type}`;
-          cell.dataset.index = cellNumber;
-          cellNumber += 1;
-          if (type !== "empty") {
-            const carrot = document.createElement("span");
-            carrot.className = "line-carrot";
-            cell.append(carrot);
-          }
-          row.append(cell);
-        }
-      });
-
-      numberLineWrap.append(title, row);
-    }
-
     function makeMiniCarrots(count) {
       const wrap = document.createElement("span");
       wrap.className = "mini-carrots";
@@ -1053,11 +930,10 @@
           answer,
           startCarrots: known,
           correctCarrots: target,
-          line: makeLine(`Состав ${target}: часть видна, часть пустая`, known, answer),
           badge: target,
           cloud: "Собери столько морковок",
           title: `Сколько было сначала, если добавили ${known} и стало ${target}?`,
-          hint: "Почти. Посмотри на линейку: сколько мест не хватает?",
+          hint: "Почти. Попробуй посчитать в голове или на пальцах.",
           success: `${answer} + ${known} = ${target}`,
           parts: [
             { text: "?", className: "missing", id: "missingNumber" },
@@ -1076,7 +952,6 @@
           answer,
           startCarrots: target,
           correctCarrots: answer,
-          line: makeLine(`Было ${target}: оранжевые остались, розовые отдали`, answer, 0, away),
           badge: target,
           cloud: "Было столько морковок",
           title: `У зайчика было ${target}. Он отдал ${away}. Сколько осталось?`,
@@ -1101,7 +976,6 @@
           answer,
           startCarrots: start,
           correctCarrots: target,
-          line: makeLine(`До ${target}: морковки и пустые места`, current, answer),
           badge: target,
           cloud: "Верни до этого числа",
           title: `Было ${start}, ${away} отдали. Сколько добавить, чтобы стало ${target}?`,
@@ -1125,11 +999,10 @@
         answer,
         startCarrots: known,
         correctCarrots: target,
-        line: makeLine(`Состав ${target}: морковки и пустые места`, known, answer),
         badge: target,
         cloud: "Собери столько морковок",
         title: `У зайчика уже ${known}. Сколько добавить до ${target}?`,
-        hint: "Почти. Посмотри на пустые места на линейке.",
+        hint: "Почти. Посчитай, сколько нужно добавить.",
         success: `${known} + ${answer} = ${target}`,
         parts: [
           { text: known, className: "big-number" },
@@ -1151,7 +1024,6 @@
       taskText.textContent = state.task.title;
       levelNote.textContent = level.note;
       renderEquation(state.task.parts);
-      renderNumberLine(state.task.line);
       message.textContent = "Выбери морковку с числом.";
       rabbit.classList.remove("hop", "twirl", "wiggle", "dance", "sad");
 
